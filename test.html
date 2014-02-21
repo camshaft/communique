@@ -1,0 +1,25 @@
+<script src="build/build.js"></script>
+<ul id="messages"></ul>
+<script>
+  var Communique = require('communique');
+  var comm = new Communique();
+  var ul = document.getElementById('messages');
+  comm.onChange(function(messages) {
+    ul.innerHTML = messages.map(function(msg) {
+      return '<li>' + msg.severity + ': ' + msg.message + '</li>';
+    }).join('');
+  });
+  comm.error('there was an error!');
+  comm.warn('this is your final warning');
+  comm.info('this is going to stay for 10 seconds', {ttl: 10000});
+  comm.warn('this won\'t go away', {ttl: -1});
+
+  function addMessage() {
+    var time = Math.floor(Math.random() * 5000);
+    setTimeout(function() {
+      comm.error('this is an error after ' + time + 'ms');
+      addMessage();
+    }, time);
+  }
+  addMessage();
+</script>
